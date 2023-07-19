@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "316430220089",
+    "project_id": "firbasenotification-8485a",
+    "storage_bucket": "firbasenotification-8485a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316430220089:android:2a029c1f913507abb306e8",
+        "android_client_info": {
+          "package_name": "com.example.notification_push"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316430220089-evog0ni7fpdj56qfr66n4f9snqat2t9u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0Yd0ilHxbDBSXn2VEIUAq15hnh4NkDpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316430220089-evog0ni7fpdj56qfr66n4f9snqat2t9u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "316430220089-b2o8506o2ttgkll40nrv5h5t2mvhk2jb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.myApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
