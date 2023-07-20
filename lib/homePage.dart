@@ -45,48 +45,7 @@ class _HomePageState extends State<HomePage> {
           // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: namecontroller,
-              decoration: InputDecoration(
-                  hintText: "Name Data",
-                  contentPadding: EdgeInsets.all(0),
-                  border: OutlineInputBorder(
-                      gapPadding: 4, borderRadius: BorderRadius.circular(10))),
-            ),
-            TextField(
-              controller: titlecontroller,
-              decoration: InputDecoration(
-                  hintText: "Title Data",
-                  contentPadding: EdgeInsets.all(0),
-                  border: OutlineInputBorder(
-                      gapPadding: 4, borderRadius: BorderRadius.circular(10))),
-            ),
-            TextField(
-              controller: bodycontroller,
-              decoration: InputDecoration(
-                  hintText: "Body Data",
-                  contentPadding: EdgeInsets.all(0),
-                  border: OutlineInputBorder(
-                      gapPadding: 4, borderRadius: BorderRadius.circular(10))),
-            ),
-            // TextButton(
-            //     onPressed: () async {
-            //       String name = namecontroller.text.trim();
-            //       String title = titlecontroller.text.trim();
-            //       String body = bodycontroller.text.trim();
-            //
-            //       if (name != "") {
-            //         DocumentSnapshot snp = await FirebaseFirestore.instance
-            //             .collection("UserTokens")
-            //             .doc(name)
-            //             .get();
-            //         String token = snp['token'];
-            //         print("token$token");
-            //         setState(() {});
-            //         notificationService.sendPushMessage(token, body, title);
-            //       }
-            //     },
-            //     child: Text("Submit"))
+
 
         Center(
           child: TextButton(onPressed: (){

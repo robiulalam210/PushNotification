@@ -17,6 +17,7 @@ class NotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
   void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
@@ -41,6 +42,7 @@ class NotificationService {
     String? token = await messaging.getToken();
     return token!;
   }
+
   void getToken() async {
     await messaging.getToken().then((tokendata) {
       token = tokendata!;
@@ -61,7 +63,8 @@ class NotificationService {
       'token': token,
     });
   }
-  initLocalNotification(BuildContext context,RemoteMessage message) async {
+
+  initLocalNotification(BuildContext context, RemoteMessage message) async {
     var androidInitialize =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -71,37 +74,40 @@ class NotificationService {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (payload) async {
       handleMessage(context, message);
-        });
-
+    });
   }
 
   firbaseInit(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((message) {
-      print("...................onMessage.......................");
+    FirebaseMessaging.onMessage.listen((message) async{
 
+      print("...................onMessage.......................");
+      await FirebaseFirestore.instance.collection("Notification").doc("User1").set({
+        'title': message.notification!.title,
+        'body': message.notification!.body,
+      });
       print(
           "onMessage: ${message.notification!.title} / ${message.notification!.body}");
+
       print(message.data["id"]);
-      if(Platform.isIOS){
+      if (Platform.isIOS) {
         forgroundMessage();
       }
 
-
-      if(Platform.isAndroid){
+      if (Platform.isAndroid) {
         initLocalNotification(context, message);
         showNotification(message);
-      }else{
+      } else {
         showNotification(message);
       }
-
     });
-
   }
 
   Future<void> showNotification(RemoteMessage message) async {
     AndroidNotificationChannel channel = AndroidNotificationChannel(
         Random.secure().nextInt(1000).toString(), "name",
-        importance: Importance.max);
+        importance: Importance.max,showBadge: true,
+
+    );
     BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
         message.notification!.body.toString(),
         htmlFormatBigText: true,
@@ -117,52 +123,48 @@ class NotificationService {
             ticker: "ticker",
             styleInformation: bigTextStyleInformation,
             playSound: true);
-    const DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails(
-        presentAlert: true ,
-        presentBadge: true ,
-        presentSound: true
-    ) ;
-    NotificationDetails platformChannelSpecifiics =
-        NotificationDetails(android: androidNotificationDetails,iOS: darwinNotificationDetails);
+    const DarwinNotificationDetails darwinNotificationDetails =
+        DarwinNotificationDetails(
+            presentAlert: true, presentBadge: true, presentSound: true);
+    NotificationDetails platformChannelSpecifiics = NotificationDetails(
+        android: androidNotificationDetails, iOS: darwinNotificationDetails);
 
     Future.delayed(Duration.zero, () async {
       await flutterLocalNotificationsPlugin.show(
-          0,
-          message.notification!.title.toString(),
-          message.notification!.body,
-          platformChannelSpecifiics,
-          payload: message.data['body'],);
+        0,
+        message.notification!.title.toString(),
+        message.notification!.body,
+        platformChannelSpecifiics,
+        payload: message.data['body'],
+      );
     });
   }
 
-  void handleMessage(BuildContext context,RemoteMessage message){
-    if(message.data['type'] =='chat'){
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MessageScreen(
-            id: message.data['id'] ,
-          )));
+  void handleMessage(BuildContext context, RemoteMessage message) {
+    if (message.data['type'] == 'chat') {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MessageScreen(
+                    id: message.data['id'],
+                  )));
     }
-
   }
 
-  Future<void> setupInteractMessage(BuildContext context)async{
-
+  Future<void> setupInteractMessage(BuildContext context) async {
     // when app is terminated
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
-    if(initialMessage != null){
+    if (initialMessage != null) {
       handleMessage(context, initialMessage);
     }
-
 
     //when app ins background
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       handleMessage(context, event);
     });
-
   }
-
-
 
   void sendPushMessage(String token, String body, String title) async {
     var d = {
@@ -237,8 +239,10 @@ class NotificationService {
     //
     // }
   }
+
   Future forgroundMessage() async {
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
